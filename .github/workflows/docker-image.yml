@@ -36,6 +36,7 @@ jobs:
 
   pull_and_deploy_image:
     name: Pull and deploy docker image
+    needs: build_and_push_to_registry
     runs-on: ubuntu-latest
 
     steps:
