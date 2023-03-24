@@ -55,5 +55,8 @@ jobs:
       with:
         token: ${{ secrets.DO_ACCESS_TOKEN }}
 
-    - name: Sanity check doctl output 
-      run: doctl projects list
+    - name: Get currently running app ID 
+      run: echo "DO_APP_ID=$(doctl apps list --format ID | tail -n 1)" >> $GITHUB_ENV
+
+    - name: Redeploy application with latest tag
+      run: doctl apps create-deployment ${{ env.DO_APP_ID }}
