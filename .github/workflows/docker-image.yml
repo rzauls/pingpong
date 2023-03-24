@@ -37,7 +37,7 @@ jobs:
 
   ssh_and_deploy_image:
     name: SSH into VPS and deploy docker image
-    needs: build_and_push_to_registry
+    # needs: build_and_push_to_registry
     runs-on: ubuntu-latest
 
     steps:
