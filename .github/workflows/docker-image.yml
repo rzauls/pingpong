@@ -53,6 +53,6 @@ jobs:
       run: >
         ssh root@${{ env.APP_HOST }} 
         "docker pull ${{ secrets.REGISTRY_USERNAME }}/pingpong &&
-        docker container stop pingpong-server || true &&
+        docker container rm -f pingpong-server || true &&
         docker run -d -p 80:8081 --name pingpong-server ${{ secrets.REGISTRY_USERNAME }}/pingpong:latest"
 
