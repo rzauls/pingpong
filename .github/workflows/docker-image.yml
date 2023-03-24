@@ -53,5 +53,5 @@ jobs:
       run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
 
     - name: SSH into VPS Redeploy image
-      run: ssh root@${{ env.APP_HOST }} "docker pull ${{ secrets.REGISTRY_USERNAME }}/pingpong && docker run -p 80:8081 ${{ secrets.REGISTRY_USERNAME }}/pingpong:latest"
+      run: ssh root@${{ env.APP_HOST }} "docker pull ${{ secrets.REGISTRY_USERNAME }}/pingpong && docker run -d -p 80:8081 ${{ secrets.REGISTRY_USERNAME }}/pingpong:latest"
 
