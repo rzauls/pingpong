@@ -9,6 +9,7 @@ on:
 env:
   IMAGE_TAG: pingpong:latest
   PROJECT: gh-test
+  APP_HOST: 161.35.16.147
 
 jobs:
 
@@ -50,13 +51,9 @@ jobs:
     - name: Pull the Docker image
       run: docker pull ${{secrets.REGISTRY_USERNAME}}/${{ env.IMAGE_TAG }}
 
-    - name: Install `doctl` (digital ocean cli)
-      uses: digitalocean/action-doctl@v2
+    - name: SSH into VPS and redeploy image
+      uses: webfactory/ssh-agent
       with:
-        token: ${{ secrets.DO_ACCESS_TOKEN }}
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: ssh root@${{ env.APP_HOST }} "docker pull rzauls/pingpong && docker run -p 80:8081 rzauls/pingpong:latest"
 
-    - name: Get currently running app ID 
-      run: echo "DO_APP_ID=$(doctl apps list --format ID | tail -n 1)" >> $GITHUB_ENV
-
-    - name: Redeploy application with latest tag
-      run: doctl apps create-deployment ${{ env.DO_APP_ID }}
