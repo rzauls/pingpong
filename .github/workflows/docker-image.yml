@@ -8,6 +8,7 @@ on:
 
 env:
   IMAGE_TAG: pingpong:$(date +%s)
+  PROJECT: gh-test
 
 jobs:
 
@@ -31,4 +32,4 @@ jobs:
       run: docker build . --file Dockerfile --tag $IMAGE_TAG
 
     - name: Push image to registry
-      run: docker image push ${{ secrets.REGISTRY_URL }}/$IMAGE_TAG
+      run: docker image push ${{ secrets.REGISTRY_URL }}/$PROJECT/$IMAGE_TAG
