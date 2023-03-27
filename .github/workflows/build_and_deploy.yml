@@ -53,15 +53,24 @@ jobs:
     - name: Copy deployment script to entry-server
       run: scp deploy/deploy.sh root@${{ secrets.ENTRY_HOST }}:/root/deploy.sh 
   
+  prepare_node_list:
+    name: Prepare deployment target matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - id: set-matrix
+      run: echo "::set-output name=matrix::{\"include\":[{\"target\":\"foo\"},{\"target\":\"bar\"}]}"
+
   run_deployments:
-    name: Run deployment on node
+    name: Run deployment on target node
+    needs: prepare_node_list
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
-        target: ${{ fromJson([\"foo\", \"boo\", \"goo\"]) }}
+      matrix: ${{fromJson(needs.prepare_node_list.outputs.matrix)}}
+    steps:
 
     steps:
     - name:  Run a command on deployment target
       run: >
         echo "${{ matrix.target }}"
-       
