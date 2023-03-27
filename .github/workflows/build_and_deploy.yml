@@ -69,8 +69,6 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.prepare_node_list.outputs.matrix)}}
     steps:
-
-    steps:
     - name:  Run a command on deployment target
       run: >
         echo "${{ matrix.target }}"
