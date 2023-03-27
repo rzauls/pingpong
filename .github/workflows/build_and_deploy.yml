@@ -72,6 +72,10 @@ jobs:
     needs: prepare_node_list
     runs-on: ubuntu-latest
     strategy:
+      # Since the ssh-agent shares its ID, it can get "cleaned up" before other jobs are completed if running in parallel.
+      # this is why we only run 1 node at a time AND re-setup the ssh-agent for every node. 
+      # This is a limitation of matrix strategy + webfactory/ssh-agent.
+      # https://github.com/marketplace/actions/webfactory-ssh-agent#works-for-the-current-job-only
       max-parallel: 1
       matrix: ${{fromJson(needs.prepare_node_list.outputs.matrix)}}
 
