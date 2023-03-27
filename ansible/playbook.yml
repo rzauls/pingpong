@@ -1,4 +1,4 @@
-- name: Redeploy application
+- name: Add inventory to known_hosts
   hosts: all
   become: true
 
@@ -6,6 +6,11 @@
   - name: Add host to known_hosts
     local_action: ssh-keyscan -H {{ inventory_hostname }} >> ./ssh/known_hosts
 
+- name: Redeploy application
+  hosts: all
+  become: true
+
+  tasks:
   - name: Install Docker
     apt:
       name: docker.io
