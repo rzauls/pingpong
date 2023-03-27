@@ -48,7 +48,7 @@ jobs:
       run: ssh-keyscan -H ${{ secrets.ENTRY_HOST }} > ~/.ssh/known_hosts
 
     - name: Copy deployment script to entry-server
-      run: scp root@${{ secrets.ENTRY_HOST }}:/root/deploy.sh deploy/deploy.sh
+      run: scp deploy/deploy.sh root@${{ secrets.ENTRY_HOST }}:/root/deploy.sh 
 
     - name: List deployment targets
       run: echo ${{ secrets.TARGET_NODES }} | jq -r -e '.hosts | join("\n")'
