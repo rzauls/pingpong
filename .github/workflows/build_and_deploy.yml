@@ -36,7 +36,7 @@ jobs:
 
   run_ansible_playbook_on_inventory_hosts:
     name: Run ansible playbook on all inventory hosts
-    needs: build_and_push_to_registry
+    # needs: build_and_push_to_registry
     runs-on: ubuntu-latest
 
     steps:
