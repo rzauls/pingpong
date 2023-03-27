@@ -80,14 +80,14 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Set up SSH known hosts 
+    - name: Add SSH entry-server to known hosts
       run: ssh-keyscan -H ${{ secrets.ENTRY_HOST }} > ~/.ssh/known_hosts
 
-    - name: Add target node to known hosts
-      run: ssh root@${{secrets.ENTRY_HOST}} "ssh-keyscan -H ${{ matrix.target }} > ~/.ssh/known_hosts"
+    - name: Add SSH target node entry-server's to known hosts
+      run: ssh -t root@${{secrets.ENTRY_HOST}} "ssh-keyscan -H ${{ matrix.target }} > ~/.ssh/known_hosts"
 
     - name:  Copy deployment script to target node
-      run: ssh root@${{secrets.ENTRY_HOST}} "scp -i ${{ env.ENTRY_KEY_PATH }} /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
+      run: ssh -t root@${{secrets.ENTRY_HOST}} "scp -i ${{ env.ENTRY_KEY_PATH }} /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
 
     - name:  Run deployment script on target node
-      run: ssh root@${{secrets.ENTRY_HOST}} "ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} /root/deploy.sh"
+      run: ssh -t root@${{secrets.ENTRY_HOST}} "ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} /root/deploy.sh"
