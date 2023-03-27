@@ -50,7 +50,7 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y ansible jq
 
     - name: Scan inventory public keys
-      run: ansible-inventory -i ansible/inventory --list | jq -r '.appservers.hosts | join("\n")' | xargs -I{} ssh-keyscan {} >> ~/.ssh/known_hosts
+      run: ansible-inventory -i ansible/inventory --list | jq -e -r '.appservers.hosts | join("\n")' | xargs -I{} ssh-keyscan {} >> ~/.ssh/known_hosts
 
     - name: Run Ansible playbook
       run: ansible-playbook -u root -i ansible/inventory ansible/playbook.yml
