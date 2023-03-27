@@ -72,6 +72,7 @@ jobs:
     needs: prepare_node_list
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix: ${{fromJson(needs.prepare_node_list.outputs.matrix)}}
 
     steps:
