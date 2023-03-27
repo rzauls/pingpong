@@ -11,6 +11,9 @@ env:
   # TODO: this is very ugly, but the array needs to be with object key-value pairs. It also needs to be escaped to pass into matrix context
   TARGET_NODES: '[{\"target\":\"64.226.110.192\"},{\"target\":\"64.226.110.193\"},{\"target\":\"64.226.84.47\"}]'
 
+  # path to private key on entrypoint server, that is accepted by target nodes
+  ENTRY_KEY_PATH: /root/.ssh/entry_key
+
 jobs:
   # build_and_push_to_registry:
   #   name: Build
@@ -72,6 +75,6 @@ jobs:
       matrix: ${{fromJson(needs.prepare_node_list.outputs.matrix)}}
     steps:
     - name:  Copy deployment script to target node
-      run: ssh -qt root@${{secrets.ENTRY_HOST}} "scp /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
+      run: ssh -qt root@${{secrets.ENTRY_HOST}} "scp -i ${{ env.ENTRY_KEY_PATH }} /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
     - name:  Run deployment script on target node
-      run: ssh -qt root@${{secrets.ENTRY_HOST}} "ssh root@${{ matrix.target }} /root/deploy.sh"
+      run: ssh -qt root@${{secrets.ENTRY_HOST}} "ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} /root/deploy.sh"
