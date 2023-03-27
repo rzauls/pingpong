@@ -11,7 +11,6 @@ env:
   HOSTS: '[{\"target\":\"foo\"},{\"target\":\"bar\"}]'
 
 jobs:
-
   # build_and_push_to_registry:
   #   name: Build
   #   runs-on: ubuntu-latest
@@ -66,7 +65,6 @@ jobs:
 
   run_deployments:
     name: Deploy node
-    run-name: Deploy on ${{ matrix.target }}
     needs: prepare_node_list
     runs-on: ubuntu-latest
     strategy:
