@@ -12,48 +12,27 @@ env:
 
 jobs:
 
-  build_and_push_to_registry:
-    name: Build docker image and push to registry
-    runs-on: ubuntu-latest
-
-    steps:
-
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Log into container registry
-      uses: docker/login-action@v2
-      with:
-        # registry: ${{ secrets.REGISTRY_URL }} ## docker hub address is the default
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{secrets.REGISTRY_USERNAME}}/${{ env.IMAGE_TAG }}
-
-    - name: Push image to registry
-      run: docker image push ${{ secrets.REGISTRY_USERNAME }}/${{ env.IMAGE_TAG }}
-
-  # ssh_and_deploy_image:
-  #   name: SSH into VPS and deploy docker image
-  #   needs: build_and_push_to_registry
+  # build_and_push_to_registry:
+  #   name: Build docker image and push to registry
   #   runs-on: ubuntu-latest
   #
   #   steps:
-  #   - name: Set up SSH agent
-  #     uses: webfactory/ssh-agent@v0.7.0
+  #
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+  #
+  #   - name: Log into container registry
+  #     uses: docker/login-action@v2
   #     with:
-  #       ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #       # registry: ${{ secrets.REGISTRY_URL }} ## docker hub address is the default
+  #       username: ${{ secrets.REGISTRY_USERNAME }}
+  #       password: ${{ secrets.REGISTRY_PASSWORD }}
   #
-  #   - name: Set up SSH known hosts 
-  #     run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
+  #   - name: Build the Docker image
+  #     run: docker build . --file Dockerfile --tag ${{secrets.REGISTRY_USERNAME}}/${{ env.IMAGE_TAG }}
   #
-  #   - name: SSH into VPS Redeploy image
-  #     run: >
-  #       ssh root@${{ env.APP_HOST }} 
-  #       "docker pull ${{ secrets.REGISTRY_USERNAME }}/pingpong &&
-  #       docker container rm -f pingpong-server || true &&
-  #       docker run -d -p 80:8081 --name pingpong-server ${{ secrets.REGISTRY_USERNAME }}/pingpong:latest"
+  #   - name: Push image to registry
+  #     run: docker image push ${{ secrets.REGISTRY_USERNAME }}/${{ env.IMAGE_TAG }}
 
   run_ansible_playbook_on_inventory_hosts:
     name: Run ansible playbook on all inventory hosts
@@ -62,6 +41,14 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
+    - name: Set up SSH agent
+      uses: webfactory/ssh-agent@v0.7.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+    - name: Set up SSH known hosts 
+      run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
 
     - name: Install Ansible
       run: sudo apt-get update && sudo apt-get install -y ansible
