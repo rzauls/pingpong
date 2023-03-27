@@ -61,7 +61,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
     - id: set-matrix
-      run: echo "name=matrix::{\"include\":${{ env.HOSTS }}}" >> $GITHUB_OUTPUT
+      run: echo "matrix={\"include\":${{ env.HOSTS }}}" >> $GITHUB_OUTPUT
 
   run_deployments:
     name: Deploy node
