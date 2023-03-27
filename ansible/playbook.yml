@@ -12,6 +12,7 @@
     docker_image:
       name: rzauls/pingpong
       tag: latest
+      source: pull
 
   - name: Get running containers
     docker_host_info:
