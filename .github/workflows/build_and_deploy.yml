@@ -47,11 +47,11 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-    - name: Set up SSH known hosts 
-      run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
+    # - name: Set up SSH known hosts 
+    #   run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
 
     - name: Install Ansible
       run: sudo apt-get update && sudo apt-get install -y ansible
 
     - name: Run Ansible playbook
-      run: ansible-playbook -i ansible/inventory ansible/playbook.yml
+      run: ansible-playbook -u root -i ansible/inventory ansible/playbook.yml
