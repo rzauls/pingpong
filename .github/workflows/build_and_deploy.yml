@@ -76,10 +76,10 @@ jobs:
 
     steps:
     - name: Add target node to known hosts
-      run: ssh -qt root@{{secrets.ENTRY_HOST}} "ssh-keyscan -i ${{ env.ENTRY_KEY_PATH }} -H ${{ matrix.target }} > ~/.ssh/known_hosts"
+      run: ssh -t root@${{secrets.ENTRY_HOST}} "ssh-keyscan -i ${{ env.ENTRY_KEY_PATH }} -H ${{ matrix.target }} > ~/.ssh/known_hosts"
 
     - name:  Copy deployment script to target node
-      run: ssh -qt root@${{secrets.ENTRY_HOST}} "scp -i ${{ env.ENTRY_KEY_PATH }} /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
+      run: ssh -t root@${{secrets.ENTRY_HOST}} "scp -i ${{ env.ENTRY_KEY_PATH }} /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
 
     - name:  Run deployment script on target node
-      run: ssh -qt root@${{secrets.ENTRY_HOST}} "ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} /root/deploy.sh"
+      run: ssh -t root@${{secrets.ENTRY_HOST}} "ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} /root/deploy.sh"
