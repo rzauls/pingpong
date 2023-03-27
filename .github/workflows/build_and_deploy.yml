@@ -8,7 +8,6 @@ on:
 
 env:
   IMAGE_TAG: pingpong:latest
-  HOSTS: '[{"target":"foo"},{"target":"bar"}]'
 
 jobs:
   # build_and_push_to_registry:
@@ -61,7 +60,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
     - id: set-matrix
-      run: echo "matrix={\"include\":${{ env.HOSTS }}}" >> $GITHUB_OUTPUT
+      run: echo "matrix={\"include\":${{ secrets.TARGET_NODES }}}" >> $GITHUB_OUTPUT
 
   run_deployments:
     name: Deploy node
