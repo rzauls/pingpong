@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        target: ${{ fromJson(["foo", "boo", "goo"]) }}
+        target: ${{ fromJson([\"foo\", \"boo\", \"goo\"]) }}
 
     steps:
     - name:  Run a command on deployment target
