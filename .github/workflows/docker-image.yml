@@ -1,14 +1,13 @@
-name: Build & push to registry
+name: Build and deploy latest version
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "ansible" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "master", "ansible" ]
 
 env:
   IMAGE_TAG: pingpong:latest
-  PROJECT: gh-test
   APP_HOST: 161.35.16.147
 
 jobs:
@@ -35,24 +34,37 @@ jobs:
     - name: Push image to registry
       run: docker image push ${{ secrets.REGISTRY_USERNAME }}/${{ env.IMAGE_TAG }}
 
-  ssh_and_deploy_image:
+  # ssh_and_deploy_image:
+  #   name: SSH into VPS and deploy docker image
+  #   needs: build_and_push_to_registry
+  #   runs-on: ubuntu-latest
+  #
+  #   steps:
+  #   - name: Set up SSH agent
+  #     uses: webfactory/ssh-agent@v0.7.0
+  #     with:
+  #       ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+  #
+  #   - name: Set up SSH known hosts 
+  #     run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
+  #
+  #   - name: SSH into VPS Redeploy image
+  #     run: >
+  #       ssh root@${{ env.APP_HOST }} 
+  #       "docker pull ${{ secrets.REGISTRY_USERNAME }}/pingpong &&
+  #       docker container rm -f pingpong-server || true &&
+  #       docker run -d -p 80:8081 --name pingpong-server ${{ secrets.REGISTRY_USERNAME }}/pingpong:latest"
+
+  run_ansible_playbook_on_inventory_hosts:
     name: SSH into VPS and deploy docker image
     needs: build_and_push_to_registry
     runs-on: ubuntu-latest
 
     steps:
-    - name: Set up SSH agent
-      uses: webfactory/ssh-agent@v0.7.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+    - uses: actions/checkout@v2
 
-    - name: Set up SSH known hosts 
-      run: ssh-keyscan -H ${{ env.APP_HOST }} > ~/.ssh/known_hosts
+    - name: Install Ansible
+      run: sudo apt-get update && sudo apt-get install -y ansible
 
-    - name: SSH into VPS Redeploy image
-      run: >
-        ssh root@${{ env.APP_HOST }} 
-        "docker pull ${{ secrets.REGISTRY_USERNAME }}/pingpong &&
-        docker container rm -f pingpong-server || true &&
-        docker run -d -p 80:8081 --name pingpong-server ${{ secrets.REGISTRY_USERNAME }}/pingpong:latest"
-
+    - name: Run Ansible playbook
+      run: ansible-playbook -i inventory playbook.yml
