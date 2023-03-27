@@ -8,11 +8,12 @@ on:
 
 env:
   IMAGE_TAG: pingpong:latest
+  HOSTS: '[{\"target\":\"foo\"},{\"target\":\"bar\"}]'
 
 jobs:
 
   # build_and_push_to_registry:
-  #   name: Build docker image and push to registry
+  #   name: Build
   #   runs-on: ubuntu-latest
   #
   #   steps:
@@ -34,7 +35,7 @@ jobs:
   #     run: docker image push ${{ secrets.REGISTRY_USERNAME }}/${{ env.IMAGE_TAG }}
 
   prepare_entry_server:
-    name: Prepare entrypoint server for deployments
+    name: Prepare entrypoint
     # needs: build_and_push_to_registry
     runs-on: ubuntu-latest
 
@@ -54,16 +55,18 @@ jobs:
       run: scp deploy/deploy.sh root@${{ secrets.ENTRY_HOST }}:/root/deploy.sh 
   
   prepare_node_list:
-    name: Prepare deployment target matrix
+    name: Prepare Nodes
+    needs: prepare_entry_server
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
     - id: set-matrix
-      run: echo "::set-output name=matrix::{\"include\":[{\"target\":\"foo\"},{\"target\":\"bar\"}]}"
+      run: echo "::set-output name=matrix::{\"include\":${{ env.HOSTS }}}"
 
   run_deployments:
-    name: Run deployment on target node
+    name: Deploy node
+    run-name: Deploy on ${{ matrix.target }}
     needs: prepare_node_list
     runs-on: ubuntu-latest
     strategy:
