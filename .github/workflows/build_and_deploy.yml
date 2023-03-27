@@ -8,6 +8,8 @@ on:
 
 env:
   IMAGE_TAG: pingpong:latest
+  # TODO: this is very ugly, but the array needs to be with object key-value pairs. It also needs to be escaped to pass into matrix context
+  TARGET_NODES: '[{\"target\":\"64.226.110.192\"},{\"target\":\"64.226.110.193\"},{\"target\":\"64.226.84.47\"}]'
 
 jobs:
   # build_and_push_to_registry:
@@ -60,7 +62,7 @@ jobs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
     - id: set-matrix
-      run: echo "matrix={\"include\":${{ secrets.TARGET_NODES }}}" >> $GITHUB_OUTPUT
+      run: echo "matrix={\"include\":${{ env.TARGET_NODES }}}" >> $GITHUB_OUTPUT
 
   run_deployments:
     name: Deploy node
