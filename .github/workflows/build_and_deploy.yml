@@ -71,6 +71,7 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.prepare_node_list.outputs.matrix)}}
     steps:
-    - name:  Run a command on deployment target
-      run: >
-        echo "${{ matrix.target }}"
+    - name:  Copy deployment script to target node
+      run: ssh -qt root@${{secrets.ENTRY_HOST}} "scp /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
+    - name:  Run deployment script on target node
+      run: ssh -qt root@${{secrets.ENTRY_HOST}} "ssh root@${{ matrix.target }} /root/deploy.sh"
