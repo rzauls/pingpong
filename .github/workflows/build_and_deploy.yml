@@ -54,5 +54,5 @@ jobs:
       run: scp deploy/deploy.sh root@${{ secrets.ENTRY_HOST }}:/root/deploy.sh 
 
     - name: List deployment targets
-      run: echo ${{ secrets.TARGET_NODES }} | jq -r -e '.hosts | join("\n")'
+      run: echo "${{ secrets.TARGET_NODES }}" | jq -r -e '.hosts | join("\n")'
        
