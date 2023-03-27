@@ -91,10 +91,10 @@ jobs:
       run: ssh -t root@${{secrets.ENTRY_HOST}} "scp -i ${{ env.ENTRY_KEY_PATH }} /root/deploy.sh root@${{ matrix.target }}:/root/deploy.sh"
 
     # - name:  Log into docker registry (private registry)
-    #   run: ssh -t root@${{secrets.ENTRY_HOST}} 'ssh -i ${{ env.ENTRY_KEY_PATY }} root@${{ matrix.target }} "echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} ${{ secrets.REGISTRY_URL }} --password-stdin"'
+    #   run: ssh -t root@${{secrets.ENTRY_HOST}} 'ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} "echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} ${{ secrets.REGISTRY_URL }} --password-stdin"'
 
     - name:  Log into docker registry (only when using docker hub)
-      run: ssh -t root@${{secrets.ENTRY_HOST}} 'ssh -i ${{ env.ENTRY_KEY_PATY }} root@${{ matrix.target }} "echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin"'
+      run: ssh -t root@${{secrets.ENTRY_HOST}} 'ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} "echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USERNAME }} --password-stdin"'
 
     - name:  Run deployment script on target node
       run: ssh -t root@${{secrets.ENTRY_HOST}} "ssh -i ${{ env.ENTRY_KEY_PATH }} root@${{ matrix.target }} /root/deploy.sh"
