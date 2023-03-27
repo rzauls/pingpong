@@ -57,7 +57,7 @@ jobs:
     name: Run deployment on node
     strategy:
       matrix: 
-        target_node: ${{ secrets.TARGET_NODES }}
+        target_node: ${{ fromJson(secrets.TARGET_NODES) }}
 
     steps:
     - name:  Run a command on deployment target
