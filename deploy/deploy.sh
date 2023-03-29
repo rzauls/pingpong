@@ -15,9 +15,9 @@ install_docker ()
 run_deployment ()
 {
     echo "running deployment"
-    docker pull rzauls/pingpong
+    docker pull ghcr.io/rzauls/pingpong:latest
     docker container rm -f pingpong-server || true
-    docker run -d -p 80:8081 --name pingpong-server rzauls/pingpong:latest
+    docker run -d -p 80:8081 --name pingpong-server ghcr.io/rzauls/pingpong:latest
 }
 
 if ! [ -x "$(command -v docker)" ]; then
