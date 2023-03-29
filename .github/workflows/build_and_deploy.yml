@@ -35,7 +35,7 @@ jobs:
         password: ${{ secrets.REGISTRY_PASSWORD }}
 
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag ${{ env.IMAGE_NAMESPACE}}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
+      run: docker build . --file Dockerfile --tag ${{ env.REGISTRY_URL}}/${{ env.IMAGE_NAMESPACE}}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
 
     - name: Push image to registry
       run: docker image push ${{ env.REGISTRY_URL }}/${{ env.IMAGE_NAMESPACE}}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_VERSION }}
