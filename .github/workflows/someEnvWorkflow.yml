@@ -6,7 +6,7 @@ on:
 
 jobs:
   call-workflow:
-    uses: rzauls/pingpong/.github/workflows/reusableA.yml@latest
+    uses: rzauls/pingpong/.github/workflows/reusableA.yml@master
     with:
      some-input-variable: "foo im a real variable"
     
