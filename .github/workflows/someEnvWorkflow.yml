@@ -1,8 +1,14 @@
 name: Workflow for a specific env that extends something else
 
+on:
+ push:
+  branches: ["master"]
+
 jobs:
   call-workflow:
     uses: rzauls/pingpong/.github/workflows/reusableA.yml@latest
+    with:
+     some-input-variable: "foo im a real variable"
     
   env_specific_job:
     name: Im deployin to test
