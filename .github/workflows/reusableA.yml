@@ -1,5 +1,12 @@
 name: Some base workflow A
 
+on:
+  workflow_call:
+    inputs:
+     some-input-variable:
+        required: true
+        type: string
+        
 jobs:
   very_important_job:
     name: Base job from workflow A
@@ -7,4 +14,4 @@ jobs:
 
     steps:
     - name: Do important base step
-      run: echo "im a real workflow"
+      run: echo 'im a real workflow, heres the required input that i recieved ${{ inputs.some-input-variable }}'
