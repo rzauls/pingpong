@@ -1,0 +1,10 @@
+name: Some base workflow A
+
+jobs:
+  very_important_job:
+    name: Base job from workflow A
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Do important base step
+      run: echo "im a real workflow"

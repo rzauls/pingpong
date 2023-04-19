@@ -1,0 +1,13 @@
+name: Workflow for a specific env that extends something else
+
+jobs:
+  call-workflow:
+    uses: rzauls/pingpong/.github/workflows/reusableA.yml@latest
+    
+  env_specific_job:
+    name: Im deployin to test
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Do important env-specific step
+      run: echo "Totally deployed."
