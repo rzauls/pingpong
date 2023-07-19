@@ -11,7 +11,7 @@ env:
   IMAGE_NAME: pingpong
   IMAGE_NAMESPACE: rzauls
   IMAGE_VERSION: latest
-  # TODO: this is very ugly, but the array needs to be with object key-value pairs. It also needs to be escaped to pass into matrix context
+  # TODO: this is very ugly, but the array needs to be with object key-value pairs. It also needs to be escaped to pass into matrix context yes
   TARGET_NODES: '[{\"target\":\"64.226.110.192\"},{\"target\":\"64.226.110.193\"},{\"target\":\"64.226.84.47\"}]'
 
   # path to private key on entrypoint server, that is accepted by target nodes
